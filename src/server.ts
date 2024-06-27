@@ -1,4 +1,4 @@
-import { app } from "./app";
+import app from "./app";
 import getConfig from "./utils/createConfig";
 import { connect, disconnect } from "./utils/dbconnection";
 import { logger, logInit } from "./utils/logger";

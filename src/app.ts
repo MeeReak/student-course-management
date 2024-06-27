@@ -1,8 +1,15 @@
 import express from "express";
+import { errorHandler } from "./middlewares/error-handler";
+import StudentRouter from "./routes/student.routes";
 
 //create express app
-export const app = express();
+const app = express();
 
-app.get("/", (_req, res) => {
-  res.send("Hello World");
-});
+//get the data from body
+app.use(express.json());
+
+app.use("/v1/students", StudentRouter);
+
+app.use(errorHandler);
+
+export default app;
