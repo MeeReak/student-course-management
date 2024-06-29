@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 import APIError from "../../Errors/api-error";
-import { IStudent, IUpdateStudent } from "../../types/student.types";
+import { IQuery, IStudent, IUpdateStudent } from "../../types/student.types";
 import { StatusCode } from "../../utils/consts";
 import { logger } from "../../utils/logger";
 import StudentModel from "../models/student.model";
-import { IQuery } from "../types/student.type";
 
 class StudentRepositories {
   async AddStudent({ info }: { info: IStudent }) {
@@ -18,6 +17,10 @@ class StudentRepositories {
       return newStudent;
     } catch (error: unknown | any) {
       logger.error(`An error occurred in AddStudent(): ${error}`);
+
+      if (error instanceof APIError) {
+        throw error;
+      }
 
       throw new APIError("Error While Creating Student", StatusCode.BadRequest);
     }
@@ -43,6 +46,10 @@ class StudentRepositories {
     } catch (error: unknown | any) {
       logger.error(`An error occurred in UpdateStudent(): ${error}`);
 
+      if (error instanceof APIError) {
+        throw error;
+      }
+
       throw new APIError("Error While Updating Student", StatusCode.BadRequest);
     }
   }
@@ -58,6 +65,10 @@ class StudentRepositories {
       return students;
     } catch (error: unknown | any) {
       logger.error(`An error occurred in getAllStudents(): ${error}`);
+
+      if (error instanceof APIError) {
+        throw error;
+      }
 
       throw new APIError(
         "Error While Getting All Students",
@@ -87,6 +98,10 @@ class StudentRepositories {
       return student;
     } catch (error: unknown | any) {
       logger.error(`An error occurred in getStudentById(): ${error}`);
+
+      if (error instanceof APIError) {
+        throw error;
+      }
 
       if (error instanceof APIError) {
         throw error;
@@ -124,6 +139,10 @@ class StudentRepositories {
         throw error;
       }
 
+      if (error instanceof APIError) {
+        throw error;
+      }
+
       throw new APIError("Error While Delete Student", StatusCode.BadRequest);
     }
   }
@@ -150,6 +169,10 @@ class StudentRepositories {
       return student;
     } catch (error: unknown | any) {
       logger.error(`An error occurred in findStudentByQuery(): ${error}`);
+
+      if (error instanceof APIError) {
+        throw error;
+      }
 
       throw new APIError("Error While Query Student", StatusCode.BadRequest);
     }

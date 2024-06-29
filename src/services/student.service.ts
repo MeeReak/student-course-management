@@ -1,7 +1,6 @@
 import StudentRepositories from "../databases/repositories/student.repositories";
-import { IQuery } from "../databases/types/student.type";
 import APIError from "../Errors/api-error";
-import { IStudent, IUpdateStudent } from "../types/student.types";
+import { IQuery, IStudent, IUpdateStudent } from "../types/student.types";
 import { StatusCode } from "../utils/consts";
 
 class StudentService {

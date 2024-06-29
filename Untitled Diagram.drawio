@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-06-26T11:02:22.740Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="ekZMLzfLSMrk9niuaaVB" version="24.6.2" type="device" pages="2">
+<mxfile host="app.diagrams.net" modified="2024-06-29T02:51:19.561Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="rCfNrr5BNOiGxOqZPPVY" version="24.6.3" type="device" pages="2">
   <diagram name="Page-1" id="uRY-HopfwleFQo7y00Na">
-    <mxGraphModel dx="1553" dy="906" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1036" dy="679" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -25,7 +25,7 @@
         <mxCell id="0JAjfpb4kChMgYYx4onG-7" value="phoneNumber: number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="0JAjfpb4kChMgYYx4onG-2" vertex="1">
           <mxGeometry y="130" width="191" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="Sf4R72-lRe07RLmABFSA-1" value="studentId: [string[" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="0JAjfpb4kChMgYYx4onG-2">
+        <mxCell id="Sf4R72-lRe07RLmABFSA-1" value="studentId: [string[" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="0JAjfpb4kChMgYYx4onG-2" vertex="1">
           <mxGeometry y="156" width="191" height="26" as="geometry" />
         </mxCell>
         <mxCell id="0JAjfpb4kChMgYYx4onG-8" value="isDeleted: boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="0JAjfpb4kChMgYYx4onG-2" vertex="1">
@@ -40,7 +40,7 @@
         <mxCell id="0JAjfpb4kChMgYYx4onG-11" value="&lt;div&gt;professorName: string&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="0JAjfpb4kChMgYYx4onG-9" vertex="1">
           <mxGeometry y="52" width="192" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="0JAjfpb4kChMgYYx4onG-12" value="numberOfCourse: number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="0JAjfpb4kChMgYYx4onG-9" vertex="1">
+        <mxCell id="0JAjfpb4kChMgYYx4onG-12" value="numberOfStudent: [string]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="0JAjfpb4kChMgYYx4onG-9" vertex="1">
           <mxGeometry y="78" width="192" height="26" as="geometry" />
         </mxCell>
         <mxCell id="0JAjfpb4kChMgYYx4onG-13" value="&lt;div&gt;&lt;div&gt;startDate: Date&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="0JAjfpb4kChMgYYx4onG-9" vertex="1">

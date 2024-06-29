@@ -1,6 +1,5 @@
-import { IQuery } from "../databases/types/student.type";
 import StudentService from "../services/student.service";
-import { IStudent, IUpdateStudent } from "../types/student.types";
+import { IQuery, IStudent, IUpdateStudent } from "../types/student.types";
 
 class StudentController {
   stuService: StudentService;
