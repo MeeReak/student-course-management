@@ -1,12 +1,16 @@
 import express, { NextFunction, Request, Response } from "express";
 import StudentController from "../controllers/student.controller";
 import { StatusCode } from "../utils/consts";
+import { validateInput } from "../middlewares/validate-input";
+import studentSchema from "../schemas/student.schema";
 
 const StudentRouter = express.Router();
 const controller = new StudentController();
 
+//create a new student
 StudentRouter.post(
   "/",
+  validateInput(studentSchema),
   async (_req: Request, _res: Response, _next: NextFunction) => {
     try {
       const student = await controller.addStudent(_req.body);
@@ -21,6 +25,7 @@ StudentRouter.post(
   }
 );
 
+//find the student by name or phoneNumber
 StudentRouter.get(
   "/search",
   async (_req: Request, _res: Response, _next: NextFunction) => {
@@ -37,8 +42,10 @@ StudentRouter.get(
   }
 );
 
+//update the info of the student
 StudentRouter.post(
   "/:id",
+  validateInput(studentSchema),
   async (_req: Request, _res: Response, _next: NextFunction) => {
     try {
       const id = _req.params.id;
@@ -54,6 +61,7 @@ StudentRouter.post(
   }
 );
 
+//get all the student
 StudentRouter.get(
   "/",
   async (_req: Request, _res: Response, _next: NextFunction) => {
@@ -70,6 +78,7 @@ StudentRouter.get(
   }
 );
 
+//get the student by spicific id
 StudentRouter.get(
   "/:id",
   async (_req: Request, _res: Response, _next: NextFunction) => {
@@ -81,6 +90,24 @@ StudentRouter.get(
         message: "Students fetched successfully",
         statusCode: StatusCode.OK,
         data: students,
+      });
+    } catch (error: unknown | any) {
+      _next(error);
+    }
+  }
+);
+
+//delete the student
+StudentRouter.delete(
+  "/:id",
+  async (_req: Request, _res: Response, _next: NextFunction) => {
+    try {
+      const id = _req.params.id;
+      const student = await controller.deleteStudent(id);
+      _res.status(StatusCode.Created).json({
+        message: "Student deleted successfully",
+        statusCode: StatusCode.Created,
+        data: student,
       });
     } catch (error: unknown | any) {
       _next(error);

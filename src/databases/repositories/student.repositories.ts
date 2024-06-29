@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import APIError from "../../Errors/api-error";
 import { IStudent, IUpdateStudent } from "../../types/student.types";
 import { StatusCode } from "../../utils/consts";
@@ -24,6 +25,12 @@ class StudentRepositories {
 
   async UpdateStudent({ id, info }: { id: string; info: IUpdateStudent }) {
     try {
+      const cheakId = mongoose.Types.ObjectId.isValid(id);
+
+      if (!cheakId) {
+        throw new APIError("Invalid Id", StatusCode.BadRequest);
+      }
+
       const student = await StudentModel.findByIdAndUpdate(id, info, {
         new: true,
       });
@@ -61,7 +68,17 @@ class StudentRepositories {
 
   async getStudentById(id: string) {
     try {
+      const cheakId = mongoose.Types.ObjectId.isValid(id);
+
+      if (!cheakId) {
+        throw new APIError("Invalid Id", StatusCode.BadRequest);
+      }
+
       const student = await StudentModel.findById(id);
+
+      if (student?.isDelete == true) {
+        throw new APIError("Student not found", StatusCode.BadRequest);
+      }
 
       if (!student) {
         throw new APIError("Cannot find student", StatusCode.BadRequest);
@@ -71,10 +88,43 @@ class StudentRepositories {
     } catch (error: unknown | any) {
       logger.error(`An error occurred in getStudentById(): ${error}`);
 
+      if (error instanceof APIError) {
+        throw error;
+      }
+
       throw new APIError(
         "Error While Getting Student By Id",
         StatusCode.BadRequest
       );
+    }
+  }
+
+  async deleteStudent(id: string) {
+    try {
+      const cheakId = mongoose.Types.ObjectId.isValid(id);
+
+      if (!cheakId) {
+        throw new APIError("Invalid Id", StatusCode.BadRequest);
+      }
+
+      const student = await this.getStudentById(id);
+
+      if (!student) {
+        throw new APIError("Cannot find student", StatusCode.BadRequest);
+      }
+
+      student.isDelete = true;
+      await student.save();
+
+      return student;
+    } catch (error: unknown) {
+      logger.error(`An error occurred in deleteStudent(): ${error}`);
+
+      if (error instanceof APIError) {
+        throw error;
+      }
+
+      throw new APIError("Error While Delete Student", StatusCode.BadRequest);
     }
   }
 
@@ -89,9 +139,14 @@ class StudentRepositories {
       if (km) search["name.km"] = km;
       if (phoneNumber) search.phoneNumber = phoneNumber;
 
-      console.log("======", search);
+      const allStudent = await StudentModel.find(search ? search : {});
 
-      const student = await StudentModel.find(search ? search : {});
+      const student = allStudent.filter((student) => student.isDelete == false);
+
+      if (student.length === 0) {
+        throw new APIError("Cannot find student", StatusCode.BadRequest);
+      }
+
       return student;
     } catch (error: unknown | any) {
       logger.error(`An error occurred in findStudentByQuery(): ${error}`);

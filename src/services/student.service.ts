@@ -47,12 +47,19 @@ class StudentService {
     }
   }
 
-  
-
   async findStudentByQuery(query: IQuery) {
     try {
-      const student = await this.studentRepo.findStudentByQuery(query)
-      return student
+      const student = await this.studentRepo.findStudentByQuery(query);
+      return student;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
+
+  async deleteStudent(id: string) {
+    try {
+      const student = await this.studentRepo.deleteStudent(id);
+      return student;
     } catch (error: unknown | any) {
       throw error;
     }

@@ -53,6 +53,15 @@ class StudentController {
       throw error;
     }
   }
+
+  async deleteStudent(id: string) {
+    try {
+      const student = await this.stuService.deleteStudent(id);
+      return student;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
 }
 
 export default StudentController;
