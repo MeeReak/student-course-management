@@ -61,6 +61,24 @@ class StudentController {
       throw error;
     }
   }
+
+  async registerCourse({ id, courseId }: { id: string; courseId: string }) {
+    try {
+      const student = await this.stuService.registerCourse({ id, courseId });
+      return student;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
+
+  async removeCourse({ id, courseId }: { id: string; courseId: string }) {
+    try {
+      const student = await this.stuService.removeCourse({ id, courseId });
+      return student;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
 }
 
 export default StudentController;

@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import APIError from "../../Errors/api-error";
 import { IQuery, IStudent, IUpdateStudent } from "../../types/student.types";
 import { StatusCode } from "../../utils/consts";
@@ -28,12 +27,6 @@ class StudentRepositories {
 
   async UpdateStudent({ id, info }: { id: string; info: IUpdateStudent }) {
     try {
-      const cheakId = mongoose.Types.ObjectId.isValid(id);
-
-      if (!cheakId) {
-        throw new APIError("Invalid Id", StatusCode.BadRequest);
-      }
-
       const student = await StudentModel.findByIdAndUpdate(id, info, {
         new: true,
       });
@@ -58,11 +51,24 @@ class StudentRepositories {
     try {
       const students = await StudentModel.find();
 
-      if (!students) {
-        throw new APIError("Cannot find students", StatusCode.BadRequest);
+      if (students.length === 0) {
+        throw new APIError("No Student found", StatusCode.BadRequest);
       }
 
-      return students;
+      const report = students.map((student) => {
+        return {
+          name: {
+            english: student.name.en,
+            khmer: student.name.km,
+          },
+          dateOfBirth: student.dateOfBirth,
+          gender: student.gender,
+          phoneNumber: student.phoneNumber,
+          numberOfCourse: student.Course.length,
+        };
+      });
+
+      return report;
     } catch (error: unknown | any) {
       logger.error(`An error occurred in getAllStudents(): ${error}`);
 
@@ -79,29 +85,19 @@ class StudentRepositories {
 
   async getStudentById(id: string) {
     try {
-      const cheakId = mongoose.Types.ObjectId.isValid(id);
-
-      if (!cheakId) {
-        throw new APIError("Invalid Id", StatusCode.BadRequest);
-      }
-
       const student = await StudentModel.findById(id);
-
-      if (student?.isDelete == true) {
-        throw new APIError("Student not found", StatusCode.BadRequest);
-      }
 
       if (!student) {
         throw new APIError("Cannot find student", StatusCode.BadRequest);
       }
 
+      if (student?.isDelete == true) {
+        throw new APIError("Student not found", StatusCode.BadRequest);
+      }
+
       return student;
     } catch (error: unknown | any) {
       logger.error(`An error occurred in getStudentById(): ${error}`);
-
-      if (error instanceof APIError) {
-        throw error;
-      }
 
       if (error instanceof APIError) {
         throw error;
@@ -116,12 +112,6 @@ class StudentRepositories {
 
   async deleteStudent(id: string) {
     try {
-      const cheakId = mongoose.Types.ObjectId.isValid(id);
-
-      if (!cheakId) {
-        throw new APIError("Invalid Id", StatusCode.BadRequest);
-      }
-
       const student = await this.getStudentById(id);
 
       if (!student) {
@@ -139,28 +129,13 @@ class StudentRepositories {
         throw error;
       }
 
-      if (error instanceof APIError) {
-        throw error;
-      }
-
       throw new APIError("Error While Delete Student", StatusCode.BadRequest);
     }
   }
 
   async findStudentByQuery(query: IQuery) {
     try {
-      console.log(query);
-
-      const { km, en, phoneNumber } = query;
-
-      const search: { [key: string]: any } = {};
-      if (en) search["name.en"] = { $regex: en, $options: "i" }; // Case-insensitive partial match
-      if (km) search["name.km"] = km;
-      if (phoneNumber) search.phoneNumber = phoneNumber;
-
-      const allStudent = await StudentModel.find(search ? search : {});
-
-      const student = allStudent.filter((student) => student.isDelete == false);
+      const student = await StudentModel.find(query ? query : {});
 
       if (student.length === 0) {
         throw new APIError("Cannot find student", StatusCode.BadRequest);

@@ -42,6 +42,41 @@ StudentRouter.get(
   }
 );
 
+//add and remove the course from the student
+StudentRouter.post(
+  "/:id/course/:courseId",
+  async (_req: Request, _res: Response, _next: NextFunction) => {
+    try {
+      const { id, courseId } = _req.params;
+      const student = await controller.registerCourse({ id, courseId });
+      _res.status(StatusCode.Created).json({
+        message: "Course added successfully",
+        statusCode: StatusCode.Created,
+        data: student,
+      });
+    } catch (error: unknown | any) {
+      _next(error);
+    }
+  }
+);
+
+StudentRouter.delete(
+  "/:id/course/:courseId",
+  async (_req: Request, _res: Response, _next: NextFunction) => {
+    try {
+      const { id, courseId } = _req.params;
+      const student = await controller.removeCourse({ id, courseId });
+      _res.status(StatusCode.Created).json({
+        message: "Course remove successfully",
+        statusCode: StatusCode.Created,
+        data: student,
+      });
+    } catch (error: unknown | any) {
+      _next(error);
+    }
+  }
+);
+
 //update the info of the student
 StudentRouter.post(
   "/:id",
@@ -63,13 +98,14 @@ StudentRouter.post(
 
 //get all the student
 StudentRouter.get(
-  "/",
+  "/reports",
   async (_req: Request, _res: Response, _next: NextFunction) => {
     try {
       const students = await controller.getAllStudents();
       _res.status(StatusCode.OK).json({
-        message: "Students fetched successfully",
+        message: "Students Report fetched successfully",
         statusCode: StatusCode.OK,
+        length: students.length,
         data: students,
       });
     } catch (error: unknown | any) {

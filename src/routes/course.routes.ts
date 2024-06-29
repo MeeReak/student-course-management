@@ -26,7 +26,7 @@ CourseRouter.post(
 
 //get all the course
 CourseRouter.get(
-  "/",
+  "/reports",
   async (_req: Request, _res: Response, _next: NextFunction) => {
     try {
       const course = await controller.getAllCourse();

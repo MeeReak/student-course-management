@@ -33,22 +33,35 @@ class CourseRepositories {
 
   async getAllCourse() {
     try {
-      const course = await CourseModel.find();
+      const courses = await CourseModel.find({ isDelete: false });
 
-      if (!course) {
-        throw new APIError("Course not Found", StatusCode.BadRequest);
+      if (courses.length === 0) {
+        throw new APIError("No course found", StatusCode.BadRequest);
       }
 
-      return course;
-    } catch (error: unknown | any) {
-      logger.error(`An error occurred in getAllCourse(): ${error}`);
+      const report = courses.map((course) => ({
+        name: course.name,
+        professor: course.professorName,
+        startDate: course.startDate,
+        endDate: course.endDate,
+        studentLimit: course.limit,
+        registeredStudents: course.Enroll.length,
+      }));
+
+      return report;
+    } catch (error: unknown) {
+      logger.error(
+        `An error occurred in getAllCourses(): ${
+          error instanceof Error ? error.message : error
+        }`
+      );
 
       if (error instanceof APIError) {
         throw error;
       }
 
       throw new APIError(
-        "Error While Getting All Course",
+        "Error while getting all courses",
         StatusCode.BadRequest
       );
     }
@@ -56,20 +69,14 @@ class CourseRepositories {
 
   async getCourseById(id: string) {
     try {
-      const checkId = mongoose.Types.ObjectId.isValid(id);
-
-      if (!checkId) {
-        throw new APIError("Invalid Id", StatusCode.BadRequest);
-      }
-
       const course = await CourseModel.findById(id);
-
-      if (course?.isDelete == true) {
-        throw new APIError("Course not found", StatusCode.BadRequest);
-      }
 
       if (!course) {
         throw new APIError("Course not Found", StatusCode.BadRequest);
+      }
+
+      if (course?.isDelete == true) {
+        throw new APIError("Course not found", StatusCode.BadRequest);
       }
 
       return course;
@@ -89,12 +96,6 @@ class CourseRepositories {
 
   async UpdateCourse({ id, info }: { id: string; info: IUpdateCourse }) {
     try {
-      const checkId = mongoose.Types.ObjectId.isValid(id);
-
-      if (!checkId) {
-        throw new APIError("Invalid Id", StatusCode.BadRequest);
-      }
-
       const course = await CourseModel.findByIdAndUpdate(id, info, {
         new: true,
       });
@@ -117,12 +118,6 @@ class CourseRepositories {
 
   async deleteCousre(id: string) {
     try {
-      const checkId = mongoose.Types.ObjectId.isValid(id);
-
-      if (!checkId) {
-        throw new APIError("Invalid Id", StatusCode.BadRequest);
-      }
-
       const course = await this.getCourseById(id);
 
       if (!course) {
@@ -146,16 +141,7 @@ class CourseRepositories {
 
   async findCourseByName(query: ICourseQueryName) {
     try {
-      const { name, professorName } = query;
-
-      const search: { [key: string]: any } = {};
-      if (name) search.name = { $regex: name, $options: "i" }; // Case-insensitive partial match
-      if (professorName)
-        search.professorName = { $regex: professorName, $options: "i" };
-
-      const allCourse = await CourseModel.find(search ? search : {});
-
-      const course = allCourse.filter((course) => course.isDelete == false);
+      const course = await CourseModel.find(query ? query : {});
 
       if (course.length === 0) {
         throw new APIError("Course not Found", StatusCode.BadRequest);
@@ -175,16 +161,7 @@ class CourseRepositories {
 
   async findCourseFilter(query: ICourseFilter) {
     try {
-      const { startDate, endDate } = query;
-
-      const filter: { [key: string]: any } = {};
-
-      if (startDate) filter.startDate = { $gte: startDate };
-      if (endDate) filter.endDate = { $lte: endDate };
-
-      const allCourse = await CourseModel.find(filter ? filter : {});
-
-      const course = allCourse.filter((course) => course.isDelete == false);
+      const course = await CourseModel.find(query ? query : {});
 
       if (course.length === 0) {
         throw new APIError("Course not Found", StatusCode.BadRequest);

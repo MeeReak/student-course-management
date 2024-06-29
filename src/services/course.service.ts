@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import CourseRepositories from "../databases/repositories/course.repositories";
 import StudentRepositories from "../databases/repositories/student.repositories";
 import APIError from "../Errors/api-error";
@@ -7,7 +8,6 @@ import {
   ICourseQueryName,
   IUpdateCourse,
 } from "../types/course.types";
-import { IQuery, IStudent, IUpdateStudent } from "../types/student.types";
 import { StatusCode } from "../utils/consts";
 
 class CourseService {
@@ -39,6 +39,12 @@ class CourseService {
 
   async getCourseById(id: string) {
     try {
+      const checkId = mongoose.Types.ObjectId.isValid(id);
+
+      if (!checkId) {
+        throw new APIError("Invalid Id", StatusCode.BadRequest);
+      }
+
       const course = await this.courseRepo.getCourseById(id);
       return course;
     } catch (error: unknown | any) {
@@ -48,6 +54,12 @@ class CourseService {
 
   async UpdateCourse({ id, info }: { id: string; info: IUpdateCourse }) {
     try {
+      const checkId = mongoose.Types.ObjectId.isValid(id);
+
+      if (!checkId) {
+        throw new APIError("Invalid Id", StatusCode.BadRequest);
+      }
+
       const course = await this.courseRepo.UpdateCourse({ id, info });
       return course;
     } catch (error: unknown | any) {
@@ -57,6 +69,11 @@ class CourseService {
 
   async deleteCourse(id: string) {
     try {
+      const checkId = mongoose.Types.ObjectId.isValid(id);
+
+      if (!checkId) {
+        throw new APIError("Invalid Id", StatusCode.BadRequest);
+      }
       const course = await this.courseRepo.deleteCousre(id);
       return course;
     } catch (error: unknown | any) {
@@ -66,7 +83,17 @@ class CourseService {
 
   async findCourseByName(query: ICourseQueryName) {
     try {
-      const course = await this.courseRepo.findCourseByName(query);
+      const { name, professorName } = query;
+
+      const search: { [key: string]: any } = {};
+      if (name) search.name = { $regex: name, $options: "i" }; // Case-insensitive partial match
+      if (professorName)
+        search.professorName = { $regex: professorName, $options: "i" };
+
+      const allCourse = await this.courseRepo.findCourseByName(search);
+
+      const course = allCourse.filter((course) => course.isDelete == false);
+
       return course;
     } catch (error: unknown | any) {
       throw error;
@@ -75,7 +102,17 @@ class CourseService {
 
   async findCourseFilter(query: ICourseFilter) {
     try {
-      const course = await this.courseRepo.findCourseFilter(query);
+      const { startDate, endDate } = query;
+
+      const filter: { [key: string]: any } = {};
+
+      if (startDate) filter.startDate = { $gte: startDate };
+      if (endDate) filter.endDate = { $lte: endDate };
+
+      const allCourse = await this.courseRepo.findCourseFilter(filter);
+
+      const course = allCourse.filter((course) => course.isDelete == false);
+
       return course;
     } catch (error: unknown | any) {
       throw error;
