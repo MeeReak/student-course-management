@@ -11,7 +11,7 @@
     "stop": "pm2 stop all",
     "restart": "pm2 restart ecosystem.config.js",
     "delete": "pm2 delete all",
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && cp package.json ./build/&& cp -R configs ./build/  && cp ecosystem.config.js ./build/",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && cp package.json ./build/&& cp -R config ./build/  && cp ecosystem.config.js ./build/",
     "clean": "rm -rf ./build && rm -rf ./src//*.js && rm -rf ./src//*.js.map"
   },
   "keywords": [],
@@ -34,6 +34,7 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.5.2"
   }
 }
