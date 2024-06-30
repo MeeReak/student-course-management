@@ -6,7 +6,7 @@ import CourseRouter from "./routes/course.routes";
 //create express app
 const app = express();
 
-//get the data from body!
+//get the data from body
 app.use(express.json());
 
 app.use("/v1/students", StudentRouter);
