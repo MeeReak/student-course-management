@@ -50,6 +50,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Set DNS to Google's Public DNS
+        run: echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+
       - name: Ensure target directory exists
         uses: appleboy/ssh-action@master # Use master as in the working script
         with:
