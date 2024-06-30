@@ -7,6 +7,10 @@ on:
     paths:
       - "**"
 
+# defaults:
+#   run:
+#     working-directory:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,7 +30,7 @@ jobs:
         run: yarn build
 
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2 # Use v2 as in the working script
         with:
           name: build
           path: build
@@ -36,9 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get the Production Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2 # Use v2 as in the working script
         with:
           name: build
+          path: build
 
       - name: Add SSH Key
         uses: webfactory/ssh-agent@v0.5.3
@@ -46,45 +51,49 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Ensure target directory exists
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/ssh-action@master # Use master as in the working script
         with:
-          command: |
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
             mkdir -p /home/ubuntu/app
             chown -R ubuntu:ubuntu /home/ubuntu/app
-          host: ${{ secrets.EC2_IP }}
-          username: ${{ secrets.EC2_USERNAME }}
-          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
 
       - name: Copy files to EC2
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/scp-action@master # Use master as in the working script
         with:
-          command: |
-            scp -o StrictHostKeyChecking=no -i $PRIVATE_KEY -r build/* $USERNAME@$HOST:/home/ubuntu/
           host: ${{ secrets.EC2_IP }}
           username: ${{ secrets.EC2_USERNAME }}
-          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
+          source: "build/*"
+          target: "/home/ubuntu/"
 
       - name: Create .env file
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/ssh-action@master # Use master as in the working script
         with:
-          command: |
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
             cat <<EOF > /home/ubuntu/packages/auth/build/configs/.env
             NODE_ENV=${{ secrets.NODE_ENV }}
             PORT=${{ secrets.PORT }}
             DB_URL=${{ secrets.DB_URL }}
             LOG_LEVEL=${{ secrets.LOG_LEVEL }}
             EOF
-          host: ${{ secrets.EC2_IP }}
-          username: ${{ secrets.EC2_USERNAME }}
-          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
 
       - name: Start Application
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/ssh-action@master # Use master as in the working script
         with:
-          command: |
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
             # Check if nvm is installed
             if [ -s "$HOME/.nvm/nvm.sh" ]; then
               source "$HOME/.nvm/nvm.sh"
@@ -115,15 +124,11 @@ jobs:
             echo "Installing dependencies..."
             yarn install
 
-            # Manage the application with PM2
-            pm2 describe auth > /dev/null
-            if [ $? -eq 0 ]; then
+            # Check if the PM2 process is running
+            if pm2 show auth > /dev/null; then
               echo "Application is running. Restarting..."
-              pm2 restart auth
+              yarn restart
             else
               echo "Application is not running. Starting..."
-              pm2 start ./src/server.js --name auth
-          host: ${{ secrets.EC2_IP }}
-          username: ${{ secrets.EC2_USERNAME }}
-          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
+              yarn start:dev
+            fi
