@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: "student_course",
-    script: "./src/server.js", // Adjust this path to where your server's entry point is
+    script: "./src/server.ts", // Adjust this path to where your server's entry point is
     instances: 1,
     autorestart: true,
     watch: false,

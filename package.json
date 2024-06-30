@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "jest:debug": " jest --detectOpenHandles",
-    "start:test": "jest",
+    "start:test": "jest --coverage=true -w=1 --forceExit --detectOpenHandles --watchAll=false",
     "start:dev": "nodemon --exec ts-node src/server.ts",
     "start": "pm2 start ecosystem.config.js",
     "stop": "pm2 stop all",
