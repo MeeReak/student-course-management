@@ -109,12 +109,14 @@ jobs:
             if ! command -v yarn &> /dev/null; then
               echo "Yarn could not be found, installing yarn..."
               curl -o- -L https://yarnpkg.com/install.sh | bash
+              export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
             fi
 
             # Install pm2 if not installed
             if ! command -v pm2 &> /dev/null; then
               echo "pm2 could not be found, installing pm2..."
               yarn global add pm2
+              export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
             fi
 
             cd /home/ubuntu/app/build
