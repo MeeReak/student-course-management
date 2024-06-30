@@ -1,5 +1,4 @@
 import winston from "winston";
-import path from "path";
 
 const { combine, timestamp, printf, colorize, align } = winston.format;
 
@@ -35,15 +34,6 @@ export const logInit = ({
       silent: env === "testing",
     })
   );
-
-  if (env !== "dev") {
-    logger.add(
-      new winston.transports.File({
-        level: logLevel,
-        filename: path.join(__dirname, "logs/log.log"),
-      })
-    );
-  }
 };
 
 export const logDestroy = () => {

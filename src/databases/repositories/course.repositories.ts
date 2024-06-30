@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import APIError from "../../Errors/api-error";
 import { StatusCode } from "../../utils/consts";
 import { logger } from "../../utils/logger";

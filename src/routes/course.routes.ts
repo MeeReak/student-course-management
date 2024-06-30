@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
 import { StatusCode } from "../utils/consts";
-import { validateInput } from "../middlewares/validate-input";
 import CourseController from "../controllers/course.controller";
 
 const CourseRouter = express.Router();
