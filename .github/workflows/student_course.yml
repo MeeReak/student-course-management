@@ -82,7 +82,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cat <<EOF > /home/ubuntu/build/config/.env
+            cat <<EOF > /home/ubuntu/app/build/config/.env
             NODE_ENV=${{ secrets.NODE_ENV }}
             PORT=${{ secrets.PORT }}
             DB_URL=${{ secrets.DB_URL }}
