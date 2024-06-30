@@ -105,10 +105,10 @@ jobs:
               exit 1
             fi
 
-            # Verify yarn installation
+            # Install yarn if not installed
             if ! command -v yarn &> /dev/null; then
-              echo "Yarn could not be found"
-              exit 1
+              echo "Yarn could not be found, installing yarn..."
+              npm install -g yarn
             fi
 
             cd /home/ubuntu/app/build
