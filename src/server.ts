@@ -16,7 +16,7 @@ async function run() {
     await connect({ url: config.db_url! });
 
     // Start Server
-    const server = app.listen(config.port, () => {
+    const server = app.listen(3000, "0.0.0.0", () => {
       logger.info(`Server is listening on port: ${config.port}`);
     });
 
