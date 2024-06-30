@@ -23,7 +23,7 @@ jobs:
         run: yarn install
 
       - name: Test the project
-        run: yarn test
+        run: yarn start:test
 
       - name: Build the project
         run: yarn build
