@@ -1,4 +1,4 @@
-name: CI/CD 
+name: CI/CD
 
 on:
   push:
@@ -63,7 +63,7 @@ jobs:
           script: |
             mkdir -p /home/ubuntu/app
             chown -R ubuntu:ubuntu /home/ubuntu/app
-          
+
       - name: Copy files to EC2
         uses: appleboy/scp-action@master # Use master as in the working script
         with:
@@ -97,8 +97,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            #!/bin/bash
-
             # Check if nvm is installed
             if [ -s "$HOME/.nvm/nvm.sh" ]; then
               source "$HOME/.nvm/nvm.sh"
@@ -132,8 +130,8 @@ jobs:
             # Check if the PM2 process is running
             if pm2 show student_course > /dev/null; then
               echo "Application is running. Restarting..."
-              pm2 restart 
+              yarn restart
             else
               echo "Application is not running. Starting..."
-              pm2 start:dev
+              yarn start:dev
             fi
