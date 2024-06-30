@@ -7,10 +7,6 @@ on:
     paths:
       - "**"
 
-# defaults:
-#   run:
-#     working-directory:
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,7 +29,7 @@ jobs:
         run: yarn start:test
 
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@v2 # Use v2 as in the working script
+        uses: actions/upload-artifact@v2
         with:
           name: build
           path: build
@@ -43,103 +39,102 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get the Production Artifact
-        uses: actions/download-artifact@v2 # Use v2 as in the working script
+        uses: actions/download-artifact@v2
         with:
           name: build
           path: build
 
-    - name: Add SSH Key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Add SSH Key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Ensure target directory exists
-      uses: appleboy/ssh-action@master # Use master as in the working script
-      with:
-        host: ${{ secrets.EC2_IP }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          mkdir -p /home/ubuntu/app
-          chown -R ubuntu:ubuntu /home/ubuntu/app
+      - name: Ensure target directory exists
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            mkdir -p /home/ubuntu/app
+            chown -R ubuntu:ubuntu /home/ubuntu/app
 
-    - name: Copy files to EC2
-      uses: appleboy/scp-action@master # Use master as in the working script
-      with:
-        host: ${{ secrets.EC2_IP }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        source: "build/*"
-        target: "/home/ubuntu/app"
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "build/*"
+          target: "/home/ubuntu/app"
 
-    - name: Create .env file
-      uses: appleboy/ssh-action@master # Use master as in the working script
-      with:
-        host: ${{ secrets.EC2_IP }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          cat <<EOF > /home/ubuntu/app/build/config/.env
-          NODE_ENV=${{ secrets.NODE_ENV }}
-          PORT=${{ secrets.PORT }}
-          DB_URL=${{ secrets.DB_URL }}
-          LOG_LEVEL=${{ secrets.LOG_LEVEL }}
-          EOF
+      - name: Create .env file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cat <<EOF > /home/ubuntu/app/build/config/.env
+            NODE_ENV=${{ secrets.NODE_ENV }}
+            PORT=${{ secrets.PORT }}
+            DB_URL=${{ secrets.DB_URL }}
+            LOG_LEVEL=${{ secrets.LOG_LEVEL }}
+            EOF
 
-    - name: Start Application
-      uses: appleboy/ssh-action@master # Use master as in the working script
-      with:
-        host: ${{ secrets.EC2_IP }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          # Install nvm if not installed
-          if [ ! -s "$HOME/.nvm/nvm.sh" ]; then
-            echo "Installing nvm..."
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-          fi
+      - name: Start Application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # Install nvm if not installed
+            if [ ! -s "$HOME/.nvm/nvm.sh" ]; then
+              echo "Installing nvm..."
+              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            fi
 
-          # Verify nvm installation
-          if [ -s "$HOME/.nvm/nvm.sh" ]; then
-            source "$HOME/.nvm/nvm.sh"
-          elif [ -s "/usr/local/nvm/nvm.sh" ]; then
-            source "/usr/local/nvm/nvm.sh"
-          else
-            echo "nvm is not installed."
-            exit 1
-          fi
+            # Verify nvm installation
+            if [ -s "$HOME/.nvm/nvm.sh" ]; then
+              source "$HOME/.nvm/nvm.sh"
+            elif [ -s "/usr/local/nvm/nvm.sh" ]; then
+              source "/usr/local/nvm/nvm.sh"
+            else
+              echo "nvm is not installed."
+              exit 1
+            fi
 
-          # Verify yarn installation
-          if ! command -v yarn &> /dev/null; then
-            echo "Yarn could not be found. Installing yarn..."
-            npm install -g yarn
-          fi
+            # Verify yarn installation
+            if ! command -v yarn &> /dev/null; then
+              echo "Yarn could not be found. Installing yarn..."
+              npm install -g yarn
+            fi
 
-          cd /home/ubuntu/app/build
-          echo "Checking directory contents..."
-          ls -alh # Lists all files in the current directory
+            cd /home/ubuntu/app/build
+            echo "Checking directory contents..."
+            ls -alh # Lists all files in the current directory
 
-          # Check if server.js exists in the correct directory
-          if [ ! -f ./src/server.js ]; then
-            echo "server.js not found in ./src/"
-            exit 1
-          fi
+            # Check if server.js exists in the correct directory
+            if [ ! -f ./src/server.js ]; then
+              echo "server.js not found in ./src/"
+              exit 1
+            fi
 
-          # Install Dependencies
-          echo "Installing dependencies..."
-          yarn install
+            # Install Dependencies
+            echo "Installing dependencies..."
+            yarn install
 
-          # Check if the PM2 process is running
-          if pm2 show student_course > /dev/null; then
-            echo "Application is running. Restarting..."
-            yarn restart
-          else
-            echo "Application is not running. Starting..."
-            yarn start:dev
-          fi
+            # Check if the PM2 process is running
+            if pm2 show student_course > /dev/null; then
+              echo "Application is running. Restarting..."
+              yarn restart
+            else
+              echo "Application is not running. Starting..."
+              yarn start:dev
