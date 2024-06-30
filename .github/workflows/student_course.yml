@@ -97,6 +97,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            #!/bin/bash
+
             # Check if nvm is installed
             if [ -s "$HOME/.nvm/nvm.sh" ]; then
               source "$HOME/.nvm/nvm.sh"
@@ -130,8 +132,8 @@ jobs:
             # Check if the PM2 process is running
             if pm2 show student_course > /dev/null; then
               echo "Application is running. Restarting..."
-              yarn restart
+              pm2 restart 
             else
               echo "Application is not running. Starting..."
-              yarn start:dev
+              pm2 start:dev
             fi
