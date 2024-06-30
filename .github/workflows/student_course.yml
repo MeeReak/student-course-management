@@ -58,8 +58,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            mkdir -p /home/ubuntu/app
-            chown -R ubuntu:ubuntu /home/ubuntu/app
+            chown -R ubuntu:ubuntu /home/ubuntu
 
       - name: Copy files to EC2
         uses: appleboy/scp-action@master # Use master as in the working script
