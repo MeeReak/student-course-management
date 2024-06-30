@@ -50,11 +50,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Fix DNS issues
-        run: |
-          sudo bash -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf'
-
-
       - name: Ensure target directory exists
         uses: appleboy/ssh-action@master
         with:
