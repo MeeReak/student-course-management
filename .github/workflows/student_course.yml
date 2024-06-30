@@ -133,5 +133,5 @@ jobs:
               yarn restart
             else
               echo "Application is not running. Starting..."
-              yarn start
+              yarn start:dev
             fi

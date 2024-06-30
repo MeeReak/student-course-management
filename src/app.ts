@@ -3,7 +3,7 @@ import { errorHandler } from "./middlewares/error-handler";
 import StudentRouter from "./routes/student.routes";
 import CourseRouter from "./routes/course.routes";
 
-//create express app
+//create express appk
 const app = express();
 
 //get the data from body
