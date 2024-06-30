@@ -58,7 +58,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            chown ubuntu:ubuntu /home/ubuntu
+            echo "Attempting to change ownership..."
+            chown ubuntu:ubuntu /home/ubuntu || (echo "Failed to change ownership"; exit 1)
 
       - name: Copy files to EC2
         uses: appleboy/scp-action@master # Use master as in the working script
