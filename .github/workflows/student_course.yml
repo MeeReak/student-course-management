@@ -46,48 +46,44 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Ensure target directory exists
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
+          command: |
+            chown ubuntu:ubuntu /home/ubuntu/app
           host: ${{ secrets.EC2_IP }}
           username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          script: |
-            chown ubuntu:ubuntu /home/ubuntu/app
 
       - name: Copy files to EC2
-        uses: appleboy/scp-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
+          command: |
+            scp -o StrictHostKeyChecking=no -i $PRIVATE_KEY -r build/* $USERNAME@$HOST:/home/ubuntu/
           host: ${{ secrets.EC2_IP }}
           username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "build/*"
-          target: "/home/ubuntu/"
 
       - name: Create .env file
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
-          host: ${{ secrets.EC2_IP }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
+          command: |
             cat <<EOF > /home/ubuntu/packages/auth/build/configs/.env
             NODE_ENV=${{ secrets.NODE_ENV }}
             PORT=${{ secrets.PORT }}
             DB_URL=${{ secrets.DB_URL }}
             LOG_LEVEL=${{ secrets.LOG_LEVEL }}
             EOF
-
-      - name: Start Application
-        uses: appleboy/ssh-action@master
-        with:
           host: ${{ secrets.EC2_IP }}
           username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          script: |
+
+      - name: Start Application
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: |
             # Check if nvm is installed
             if [ -s "$HOME/.nvm/nvm.sh" ]; then
               source "$HOME/.nvm/nvm.sh"
@@ -126,4 +122,7 @@ jobs:
             else
               echo "Application is not running. Starting..."
               pm2 start ./src/server.js --name auth
-            fi
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USERNAME }}
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
