@@ -39,14 +39,14 @@ jobs:
           path: build
 
   deploy:
-  needs: build
-  runs-on: ubuntu-latest
-  steps:
-    - name: Get the Production Artifact
-      uses: actions/download-artifact@v2 # Use v2 as in the working script
-      with:
-        name: build
-        path: build
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the Production Artifact
+        uses: actions/download-artifact@v2 # Use v2 as in the working script
+        with:
+          name: build
+          path: build
 
     - name: Add SSH Key
       uses: webfactory/ssh-agent@v0.5.3
