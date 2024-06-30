@@ -139,5 +139,5 @@ jobs:
               pm2 restart student_course
             else
               echo "Application is not running. Starting..."
-              pm2 start ./src/server.js --name SCM
+              pm2 start ./src/server.js --name student_course
             fi
