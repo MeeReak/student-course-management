@@ -113,7 +113,7 @@ jobs:
               exit 1
             fi
 
-            cd /home/ubuntu/packages/auth/build
+            cd /home/ubuntu/app/build
             echo "Checking directory contents..."
             ls -alh # Lists all files in the current directory
 
@@ -128,7 +128,7 @@ jobs:
             yarn install
 
             # Check if the PM2 process is running
-            if pm2 show auth > /dev/null; then
+            if pm2 show student_course > /dev/null; then
               echo "Application is running. Restarting..."
               yarn restart
             else
