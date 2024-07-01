@@ -107,6 +107,9 @@ class StudentService {
 
       return students;
     } catch (error) {
+      if (error instanceof APIError) {
+        throw error;
+      }
       // Provide a more specific error message
       throw new Error(`Failed to find students: ${(error as Error).message}`);
     }
