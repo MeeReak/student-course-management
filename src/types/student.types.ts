@@ -33,7 +33,5 @@ export interface IStudentSchema extends Document {
 }
 
 export interface IQuery {
-  en?: string;
-  km?: string;
-  phoneNumber?: string;
+  query?: string;
 }
