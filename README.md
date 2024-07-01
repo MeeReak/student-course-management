@@ -67,7 +67,7 @@ The Student course management system built with NodeJS and Express. It allows ma
 ## Getting Started
 
 - ### Deployed
-  *To test the deployed API, click here.*[click-here](https://www.postman.com/scm666-8604/workspace/scm-workspace/collection/30787235-76b903d7-4573-4c71-b72b-bee7e76297e7?action=share&creator=30787235&active-environment=30787235-f395e208-c66f-49bd-ba54-ea73b17ffa90)
+  *To test the deployed API, click here.*[click-here](https://www.postman.com/science-astronaut-43204919/workspace/student-course-management/collection/33490622-8ceb8f79-c719-4e78-9a6a-eaff1a2505a4)
 
 
 - ### Local
@@ -148,11 +148,11 @@ _For more examples, please refer to the [Documentation](https://www.postman.com/
 - **Retrieve a Student**: `GET /v1/students/{id}`
 - **Update Student**: `POST /v1/students/{id}`
 - **Delete Student**: `DELETE /v1/students/{id}`
-<!-- - **List Students**: `GET /api/v1/students` -->
+- **List Students**: `GET /v1/students`
 
 ### 2. Student Search
 
-- **Search Students by Full Name or Phone Number**: `GET /v1/students/search?query={query}`
+- **Search Students by Full Name or Phone Number**: `GET /v1/students/search?en={en}&km={km}&phoneNumber={phoneNumber}`
 
 ### 3. Course CRUD Operations (using soft delete)
 
@@ -160,11 +160,11 @@ _For more examples, please refer to the [Documentation](https://www.postman.com/
 - **Retrieve a Course**: `GET /v1/courses/{id}`
 - **Update Course**: `PUT /v1/courses/{id}`
 - **Delete Course**: `DELETE /v1/courses/{id}`
-<!-- - **List Courses**: `GET /api/v1/courses` -->
+- **List Courses**: `GET /v1/courses` 
 
 ### 4. Course Search
 
-- **Search Courses by Name**: `GET /v1/courses/search?query={query}`
+- **Search Courses by Name**: `GET /v1/courses/search?name={name}`
 - **Advanced Search Courses by Start Date and End Date**: `GET /v1/courses/date?startDate={startDate}&endDate={endDate}`
 
 ### 5. Register/Remove Course for Student
