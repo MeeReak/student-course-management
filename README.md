@@ -152,7 +152,7 @@ _For more examples, please refer to the [Documentation](https://www.postman.com/
 
 ### 2. Student Search
 
-- **Search Students by Full Name or Phone Number**: `GET /v1/students/search?en={en}&km={km}&phoneNumber={phoneNumber}`
+- **Search Students by Full Name or Phone Number**: `GET /v1/students/search?query={query}`
 
 ### 3. Course CRUD Operations (using soft delete)
 
