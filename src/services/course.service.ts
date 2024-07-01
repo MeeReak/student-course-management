@@ -27,10 +27,18 @@ class CourseService {
       throw new APIError("Cannot create new student", StatusCode.BadRequest);
     }
   }
-
-  async getAllCourse() {
+  async getAllCourses() {
     try {
-      const course = await this.courseRepo.getAllCourse();
+      const course = await this.courseRepo.getAllCourses();
+      return course;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
+
+  async getReports() {
+    try {
+      const course = await this.courseRepo.getReports();
       return course;
     } catch (error: unknown | any) {
       throw error;

@@ -30,7 +30,35 @@ class CourseRepositories {
     }
   }
 
-  async getAllCourse() {
+  async getAllCourses() {
+    try {
+      const courses = await CourseModel.find({ isDelete: false });
+
+      if (courses.length === 0) {
+        throw new APIError("No course found", StatusCode.BadRequest);
+      }
+
+      return courses;
+    } catch (error: unknown) {
+      logger.error(
+        `An error occurred in getReportss(): ${
+          error instanceof Error ? error.message : error
+        }`
+      );
+
+      if (error instanceof APIError) {
+        throw error;
+      }
+
+      throw new APIError(
+        "Error while getting all courses",
+        StatusCode.BadRequest
+      );
+    }
+  }
+
+
+  async getReports() {
     try {
       const courses = await CourseModel.find({ isDelete: false });
 
@@ -50,7 +78,7 @@ class CourseRepositories {
       return report;
     } catch (error: unknown) {
       logger.error(
-        `An error occurred in getAllCourses(): ${
+        `An error occurred in getReportss(): ${
           error instanceof Error ? error.message : error
         }`
       );

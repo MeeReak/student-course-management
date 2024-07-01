@@ -7,6 +7,24 @@ import studentSchema from "../schemas/student.schema";
 const StudentRouter = express.Router();
 const controller = new StudentController();
 
+//get all student
+StudentRouter.get(
+  "/",
+  async (_req: Request, _res: Response, _next: NextFunction) => {
+    try {
+      const students = await controller.getAllStudent();
+      _res.status(StatusCode.OK).json({
+        message: "All Students fetched successfully",
+        statusCode: StatusCode.OK,
+        length: students.length,
+        data: students,
+      });
+    } catch (error: unknown | any) {
+      _next(error);
+    }
+  }
+);
+
 //create a new student
 StudentRouter.post(
   "/",
@@ -96,12 +114,12 @@ StudentRouter.post(
   }
 );
 
-//get all the student
+//get all the reports of the students
 StudentRouter.get(
   "/reports",
   async (_req: Request, _res: Response, _next: NextFunction) => {
     try {
-      const students = await controller.getAllStudents();
+      const students = await controller.getReports();
       _res.status(StatusCode.OK).json({
         message: "Students Report fetched successfully",
         statusCode: StatusCode.OK,
