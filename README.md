@@ -67,7 +67,7 @@ The Student course management system built with NodeJS and Express. It allows ma
 ## Getting Started
 
 - ### Deployed
-  *To test the deployed API, click here.*[click-here](https://www.postman.com/science-astronaut-43204919/workspace/student-course-management/collection/33490622-8ceb8f79-c719-4e78-9a6a-eaff1a2505a4)
+  *To test the deployed API, click here.*[click-here](https://www.postman.com/student-management/workspace/student-course-management/collection/33490622-2705de04-cef1-491b-a9f6-4326419c4e2a?action=share&creator=33490622&active-environment=33490622-5dd37a83-ad36-4f4f-95d8-567eb83bd745)
 
 
 - ### Local
