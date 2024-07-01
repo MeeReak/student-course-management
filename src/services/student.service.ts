@@ -75,24 +75,40 @@ class StudentService {
     }
   }
 
-  async findStudentByQuery(query: IQuery) {
+  async findStudentByQuery(queries: IQuery) {
     try {
-      const { km, en, phoneNumber } = query;
+      const { query } = queries;
+      const englishRegex = /^[a-zA-Z]+$/;
+      const khmerRegex = /^[\u1780-\u17FF]+$/;
+      const numberRegex = /^\d+$/;
 
       const search: { [key: string]: any } = {};
-      if (en) search["name.en"] = { $regex: en, $options: "i" }; // Case-insensitive partial match
-      if (km) search["name.km"] = km;
-      if (phoneNumber) search.phoneNumber = phoneNumber;
 
-      const allStudent = await this.studentRepo.findStudentByQuery(search);
+      if (!query) {
+        throw new Error("Query is required");
+      }
 
-      const student = allStudent.filter(
-        (student: { isDelete: boolean }) => student.isDelete == false
+      if (englishRegex.test(query)) {
+        search["name.en"] = { $regex: query, $options: "i" }; // Case-insensitive partial match
+      } else if (khmerRegex.test(query)) {
+        search["name.km"] = query;
+      } else if (numberRegex.test(query)) {
+        search.phoneNumber = query;
+      } else {
+        throw new Error("Query does not match any valid pattern");
+      }
+
+      const allStudents = await this.studentRepo.findStudentByQuery(search);
+
+      // Filter out deleted students
+      const students = allStudents.filter(
+        (student: { isDelete: boolean }) => !student.isDelete
       );
 
-      return student;
-    } catch (error: unknown | any) {
-      throw error;
+      return students;
+    } catch (error) {
+      // Provide a more specific error message
+      throw new Error(`Failed to find students: ${(error as Error).message}`);
     }
   }
 
