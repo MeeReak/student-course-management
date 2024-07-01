@@ -26,9 +26,18 @@ class StudentController {
     }
   }
 
-  async getAllStudents() {
+  async getAllStudent() {
     try {
-      const students = await this.stuService.getAllStudents();
+      const students = await this.stuService.getAllStudent();
+      return students;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
+
+  async getReports() {
+    try {
+      const students = await this.stuService.getReports();
       return students;
     } catch (error: unknown | any) {
       throw error;

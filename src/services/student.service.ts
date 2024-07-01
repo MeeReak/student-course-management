@@ -38,9 +38,18 @@ class StudentService {
     }
   }
 
-  async getAllStudents() {
+  async getAllStudent() {
     try {
-      const students = await this.studentRepo.getAllStudents();
+      const students = await this.studentRepo.getAllStudent();
+      return students;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
+
+  async getReports() {
+    try {
+      const students = await this.studentRepo.getReports();
       return students;
     } catch (error: unknown | any) {
       throw error;

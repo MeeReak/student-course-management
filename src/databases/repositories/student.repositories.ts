@@ -47,7 +47,30 @@ class StudentRepositories {
     }
   }
 
-  async getAllStudents() {
+  async getAllStudent() {
+    try {
+      const students = await StudentModel.find();
+
+      if (students.length === 0) {
+        throw new APIError("No Student found", StatusCode.BadRequest);
+      }
+
+      return students;
+    } catch (error: unknown | any) {
+      logger.error(`An error occurred in getAllStudent(): ${error}`);
+
+      if (error instanceof APIError) {
+        throw error;
+      }
+
+      throw new APIError(
+        "Error While Getting All Students",
+        StatusCode.BadRequest
+      );
+    }
+  }
+
+  async getReports() {
     try {
       const students = await StudentModel.find();
 
@@ -70,7 +93,7 @@ class StudentRepositories {
 
       return report;
     } catch (error: unknown | any) {
-      logger.error(`An error occurred in getAllStudents(): ${error}`);
+      logger.error(`An error occurred in getReports(): ${error}`);
 
       if (error instanceof APIError) {
         throw error;

@@ -24,7 +24,16 @@ class CourseController {
 
   async getAllCourse() {
     try {
-      const course = await this.courseService.getAllCourse();
+      const course = await this.courseService.getAllCourses();
+      return course;
+    } catch (error: unknown | any) {
+      throw error;
+    }
+  }
+
+  async getReports() {
+    try {
+      const course = await this.courseService.getReports();
       return course;
     } catch (error: unknown | any) {
       throw error;
