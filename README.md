@@ -138,7 +138,7 @@ _Below is an example of how to get start the project!
    ```   
 Below are some examples of how to use the API endpoints.
 
-_For more examples, please refer to the [Documentation](https://www.postman.com/scm666-8604/workspace/scm-workspace/collection/30787235-76b903d7-4573-4c71-b72b-bee7e76297e7?action=share&creator=30787235&active-environment=30787235-f395e208-c66f-49bd-ba54-ea73b17ffa90)_
+_For more examples, please refer to the [Documentation](https://www.postman.com/student-management/workspace/student-course-management/collection/33490622-2705de04-cef1-491b-a9f6-4326419c4e2a?action=share&creator=33490622&active-environment=33490622-5dd37a83-ad36-4f4f-95d8-567eb83bd745)_
 
 ### Endpoint
 
@@ -285,19 +285,3 @@ Project Link: [https://github.com/MeeReak/student-course-management.git](https:/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/scm_monolithic?style=for-the-badge
-[contributors-url]: https://github.com/vath-song99/scm_monolithic/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/vath-song99/scm_monolithic.svg?style=for-the-badge
-[forks-url]: https://github.com/vath-song99/scm_monolithic/network/members
-[stars-shield]: https://img.shields.io/github/stars/vath-song99/scm_monolithic.svg?style=for-the-badge
-[stars-url]: https://github.com/vath-song99/scm_monolithic/stargazers
-[issues-shield]: https://img.shields.io/github/issues/vath-song99/scm_monolithic.svg?style=for-the-badge
-[issues-url]: https://github.com/vath-song99/scm_monolithic/issues
-[license-shield]: https://img.shields.io/github/license/vath-song99/scm_monolithic.svg?style=for-the-badge
-[license-url]: https://github.com/vath-song99/scm_monolithic/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/vath-song99
